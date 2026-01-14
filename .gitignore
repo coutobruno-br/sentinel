@@ -1,0 +1,30 @@
+
+---
+
+# .gitignore
+
+```
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Env files
+.env
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Tests coverage
+coverage/
+```
