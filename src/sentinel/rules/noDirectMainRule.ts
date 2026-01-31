@@ -1,22 +1,47 @@
+// src/sentinel/rules/noDirectMainRule.ts
+import { PolicyRule, PolicyContext, PolicyResult } from '../engine/types'
 
-// src/sentinel/rules/noDirectMainRule.ts (updated)
-export const noDirectMainRule = {
+/**
+ * PB-11: Detecta push direto em branches protegidas (main/master)
+ *
+ * Violação: Push direto em main/master sem passar por PR
+ * Severidade: HIGH - Viola práticas de code review e CI/CD
+ */
+export const noDirectMainRule: PolicyRule = {
   id: 'no-direct-main',
+  severity: 'high',
 
-  supports(event: string) {
-    return event === 'push'
+  supports(ctx: PolicyContext): boolean {
+    return ctx.event === 'push'
   },
 
-  async execute(ctx: any) {
-    const ref = ctx.payload?.ref
+  execute(ctx: PolicyContext): PolicyResult {
+    const branch = ctx.repo.branch
+    const defaultBranch = ctx.repo.defaultBranch ?? 'main'
+    const protectedBranches = ['main', 'master', defaultBranch]
 
-    if (ref === 'refs/heads/main') {
+    const isProtected = protectedBranches.includes(branch)
+
+    if (isProtected) {
       return {
-        ruleId: 'no-direct-main',
-        message: 'Direct push to main branch detected'
+        passed: false,
+        ruleId: this.id,
+        severity: this.severity,
+        message: `Direct push to protected branch '${branch}' detected. Use pull requests instead.`,
+        details: {
+          branch,
+          defaultBranch,
+          commitSha: ctx.commit?.sha,
+          author: ctx.commit?.author
+        }
       }
     }
 
-    return null
+    return {
+      passed: true,
+      ruleId: this.id,
+      severity: this.severity,
+      message: `Push to branch '${branch}' is allowed.`
+    }
   }
 }

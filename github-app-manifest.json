@@ -1,0 +1,30 @@
+{
+  "name": "Sentinel Engine",
+  "description": "Policy-as-Code Audit Engine - Continuous compliance monitoring for your repositories",
+  "url": "https://github.com/your-org/sentinel-engine",
+  "hook_attributes": {
+    "url": "https://your-domain.com/webhook/github-app",
+    "active": true
+  },
+  "redirect_url": "https://your-domain.com/github/callback",
+  "callback_urls": [
+    "https://your-domain.com/github/callback"
+  ],
+  "setup_url": "https://your-domain.com/github/setup",
+  "setup_on_update": true,
+  "public": true,
+  "default_permissions": {
+    "contents": "read",
+    "metadata": "read",
+    "pull_requests": "read",
+    "checks": "write",
+    "statuses": "write"
+  },
+  "default_events": [
+    "push",
+    "pull_request",
+    "pull_request_review",
+    "check_run",
+    "check_suite"
+  ]
+}

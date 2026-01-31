@@ -7,7 +7,13 @@
   "type": "module",
   "main": "dist/sentinel/server.js",
   "types": "dist/server.d.ts",
+  "bin": {
+    "sentinel-check": "./dist/sentinel/cli/index.js"
+  },
   "scripts": {
+    "check": "tsx ./src/sentinel/cli/index.ts",
+    "check:staged": "tsx ./src/sentinel/cli/index.ts --staged",
+    "check:all": "tsx ./src/sentinel/cli/index.ts --all",
     "dev": "tsx watch ./src/sentinel/server.ts",
     "build": "tsc",
     "start": "node ./dist/sentinel/server.js",

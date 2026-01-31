@@ -1,27 +1,72 @@
 // src/sentinel/evidence/evidenceEngine.ts
+import crypto from 'crypto'
+import { executePolicies, ExecutionSummary } from '../engine/policyExecutor'
+import { saveExecution } from '../persistence/executionRepository'
+import { ContextBuilder } from '../context/ContextBuilder'
 
-
+/**
+ * Gera hash SHA256 de um payload para evidência imutável
+ */
 export function generateEvidenceHash(payload: unknown): string {
   const normalized = JSON.stringify(payload)
   return crypto.createHash('sha256').update(normalized).digest('hex')
 }
 
-// src/sentinel/engine/SentinelEngine.ts (updated)
-import { executePolicies } from '../engine/policyExecutor'
-import { saveExecution } from '../persistence/executionRepository'
-import crypto from 'crypto'
+export interface EvidenceEngineResult {
+  executionId: string
+  event: string
+  asset: string
+  timestamp: string
+  evidenceHash: string
+  summary: ExecutionSummary
+}
 
-export async function SentinelEngine(event: string, payload: any) {
-  const violations = await executePolicies({ event, payload })
+/**
+ * Executa o pipeline de evidências completo
+ */
+export async function runEvidenceEngine(
+  event: string,
+  payload: unknown
+): Promise<EvidenceEngineResult> {
+  // 1. Construir contexto normalizado
+  const ctx = ContextBuilder.fromGitHub(event, payload)
 
-  const evidenceHash = generateEvidenceHash({ event, payload, violations })
+  // 2. Executar políticas
+  const summary = executePolicies(ctx)
 
-  saveExecution({
-    id: crypto.randomUUID(),
+  // 3. Gerar hash de evidência
+  const evidenceHash = generateEvidenceHash({
     event,
-    asset: payload.repository?.full_name ?? 'unknown',
-    timestamp: new Date().toISOString(),
-    violations,
+    payload,
+    results: summary.results,
+    timestamp: Date.now()
+  })
+
+  // 4. Identificar asset
+  const asset = ctx.repo.owner && ctx.repo.name
+    ? `${ctx.repo.owner}/${ctx.repo.name}`
+    : 'unknown'
+
+  // 5. Gerar ID único
+  const executionId = crypto.randomUUID()
+  const timestamp = new Date().toISOString()
+
+  // 6. Persistir execução
+  saveExecution({
+    id: executionId,
+    event,
+    asset,
+    timestamp,
+    violations: summary.results.filter(r => !r.passed),
     evidenceHash
   })
+
+  return {
+    executionId,
+    event,
+    asset,
+    timestamp,
+    evidenceHash,
+    summary
+  }
 }

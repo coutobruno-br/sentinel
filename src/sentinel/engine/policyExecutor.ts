@@ -1,20 +1,62 @@
-import { noDirectMainRule } from '../rules/noDirectMainRule'
+// src/sentinel/engine/policyExecutor.ts
+import { PolicyRule, PolicyContext, PolicyResult } from './types'
+import { allMvpRules } from '../rules'
 
-interface ExecutionContext {
-  event: string
-  payload: any
+export interface ExecutionOptions {
+  rules?: PolicyRule[]
+  stopOnFirstFailure?: boolean
 }
 
-export async function executePolicies(ctx: ExecutionContext) {
-  const rules = [noDirectMainRule]
-  const violations: any[] = []
+export interface ExecutionSummary {
+  total: number
+  passed: number
+  failed: number
+  results: PolicyResult[]
+}
+
+/**
+ * Executa políticas contra um contexto
+ */
+export function executePolicies(
+  ctx: PolicyContext,
+  options: ExecutionOptions = {}
+): ExecutionSummary {
+  const rules = options.rules ?? allMvpRules
+  const results: PolicyResult[] = []
 
   for (const rule of rules) {
-    if (rule.supports(ctx.event)) {
-      const result = await rule.execute(ctx)
-      if (result) violations.push(result)
+    if (!rule.supports(ctx)) continue
+
+    const result = rule.execute(ctx)
+    results.push(result)
+
+    if (options.stopOnFirstFailure && !result.passed) {
+      break
     }
   }
 
-  return violations
+  const passed = results.filter(r => r.passed).length
+
+  return {
+    total: results.length,
+    passed,
+    failed: results.length - passed,
+    results
+  }
+}
+
+/**
+ * Executa apenas as políticas que falharam (para re-check)
+ */
+export function executeFailedPolicies(
+  ctx: PolicyContext,
+  previousResults: PolicyResult[]
+): ExecutionSummary {
+  const failedRuleIds = previousResults
+    .filter(r => !r.passed)
+    .map(r => r.ruleId)
+
+  const rulesToRun = allMvpRules.filter(r => failedRuleIds.includes(r.id))
+
+  return executePolicies(ctx, { rules: rulesToRun })
 }

@@ -1,8 +1,3 @@
 // src/sentinel/context/ExecutionContext.ts
-import { PolicyContext } from '../policies/PolicyRule'
-
-export interface ExecutionContext extends PolicyContext {
-  canonicalPayload: unknown
-  metadata?: Record<string, any>
-  source?: string
-}
+// Re-export ExecutionContext from canonical location
+export type { ExecutionContext } from '../engine/types'

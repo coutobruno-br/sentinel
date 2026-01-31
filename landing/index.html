@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sentinel Engine - Automated compliance auditing for your repositories. Policy-as-Code made simple.">
+  <meta name="keywords" content="compliance, audit, policy-as-code, github, security, devops">
+  <meta name="author" content="Sentinel Engine">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sentinel Engine - Policy-as-Code Audit Engine">
+  <meta property="og:description" content="Continuous, automated compliance auditing for your repositories.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sentinel-engine.com">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sentinel Engine">
+  <meta name="twitter:description" content="Automated compliance auditing for your repositories.">
+
+  <title>Sentinel Engine - Policy-as-Code Audit Engine</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-content">
+      <a href="#" class="logo">
+        <span class="logo-icon">🛡️</span>
+        <span class="logo-text">Sentinel</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#how-it-works" data-i18n="nav.howItWorks">How it Works</a>
+        <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Language Selector -->
+        <div class="lang-selector">
+          <button class="lang-btn" id="langBtn">
+            <span class="lang-flag">🌐</span>
+            <span class="lang-code">EN</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button data-lang="en" class="lang-option active">
+              <span>🇺🇸</span> English
+            </button>
+            <button data-lang="es" class="lang-option">
+              <span>🇪🇸</span> Español
+            </button>
+            <button data-lang="pt-BR" class="lang-option">
+              <span>🇧🇷</span> Português
+            </button>
+          </div>
+        </div>
+
+        <a href="https://github.com/apps/sentinel-engine" class="btn btn-primary" data-i18n="nav.install">
+          Install Free
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="#how-it-works" data-i18n="nav.howItWorks">How it Works</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      <a href="https://github.com/apps/sentinel-engine" class="btn btn-primary" data-i18n="nav.install">Install Free</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge" data-i18n="hero.badge">
+          Policy-as-Code for GitHub
+        </div>
+        <h1 class="hero-title" data-i18n="hero.title">
+          Compliance on <span class="gradient-text">Autopilot</span>
+        </h1>
+        <p class="hero-description" data-i18n="hero.description">
+          Automated, continuous compliance auditing for your repositories.
+          Detect security issues, enforce policies, and generate immutable evidence — all without human intervention.
+        </p>
+        <div class="hero-actions">
+          <a href="https://github.com/apps/sentinel-engine" class="btn btn-primary btn-lg">
+            <span data-i18n="hero.cta">Start Free Trial</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#how-it-works" class="btn btn-secondary btn-lg" data-i18n="hero.ctaSecondary">
+            See How it Works
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">5</span>
+            <span class="stat-label" data-i18n="hero.stats.rules">Built-in Rules</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">&lt;1s</span>
+            <span class="stat-label" data-i18n="hero.stats.speed">Audit Speed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">100%</span>
+            <span class="stat-label" data-i18n="hero.stats.automated">Automated</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="code-window">
+          <div class="code-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="code-title">sentinel-report.json</span>
+          </div>
+          <pre class="code-content"><code>{
+  "<span class="key">executionId</span>": "<span class="string">exec_7f3a...</span>",
+  "<span class="key">status</span>": "<span class="string success">passed</span>",
+  "<span class="key">rules</span>": [
+    { "<span class="key">id</span>": "<span class="string">no-direct-main</span>", "<span class="key">passed</span>": <span class="bool">true</span> },
+    { "<span class="key">id</span>": "<span class="string">pr-review-required</span>", "<span class="key">passed</span>": <span class="bool">true</span> },
+    { "<span class="key">id</span>": "<span class="string">secrets-scan</span>", "<span class="key">passed</span>": <span class="bool">true</span> },
+    { "<span class="key">id</span>": "<span class="string">test-required</span>", "<span class="key">passed</span>": <span class="bool">true</span> },
+    { "<span class="key">id</span>": "<span class="string">license-check</span>", "<span class="key">passed</span>": <span class="bool">true</span> }
+  ],
+  "<span class="key">evidenceHash</span>": "<span class="string">sha256:a1b2c3...</span>"
+}</code></pre>
+        </div>
+      </div>
+    </div>
+    <div class="hero-bg"></div>
+  </section>
+
+  <!-- Logos Section -->
+  <section class="logos">
+    <div class="container">
+      <p class="logos-title" data-i18n="logos.title">Works seamlessly with your stack</p>
+      <div class="logos-grid">
+        <div class="logo-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>GitHub</span>
+        </div>
+        <div class="logo-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 0c-.918 0-1.833.072-2.73.216-.897.144-1.776.36-2.622.648-.846.288-1.656.648-2.412 1.08-.756.432-1.458.936-2.088 1.512-.63.576-1.188 1.224-1.656 1.944C-.405 6.12-.189 6.912 0 7.776v8.448c.189.864.477 1.656.945 2.376.468.72 1.026 1.368 1.656 1.944.63.576 1.332 1.08 2.088 1.512.756.432 1.566.792 2.412 1.08.846.288 1.725.504 2.622.648.897.144 1.812.216 2.73.216h.858c.918 0 1.833-.072 2.73-.216.897-.144 1.776-.36 2.622-.648.846-.288 1.656-.648 2.412-1.08.756-.432 1.458-.936 2.088-1.512.63-.576 1.188-1.224 1.656-1.944.468-.72.756-1.512.945-2.376V7.776c-.189-.864-.477-1.656-.945-2.376-.468-.72-1.026-1.368-1.656-1.944-.63-.576-1.332-1.08-2.088-1.512-.756-.432-1.566-.792-2.412-1.08-.846-.288-1.725-.504-2.622-.648C14.262.072 13.347 0 12.429 0h-.858zm.858 2.4h.858c1.422 0 2.808.234 4.14.702 1.332.468 2.538 1.116 3.618 1.944 1.08.828 1.944 1.8 2.592 2.916.648 1.116.972 2.322.972 3.618v4.84c0 1.296-.324 2.502-.972 3.618-.648 1.116-1.512 2.088-2.592 2.916-1.08.828-2.286 1.476-3.618 1.944-1.332.468-2.718.702-4.14.702h-.858c-1.422 0-2.808-.234-4.14-.702-1.332-.468-2.538-1.116-3.618-1.944-1.08-.828-1.944-1.8-2.592-2.916C1.473 18.922 1.149 17.716 1.149 16.42v-4.84c0-1.296.324-2.502.972-3.618.648-1.116 1.512-2.088 2.592-2.916 1.08-.828 2.286-1.476 3.618-1.944 1.332-.468 2.718-.702 4.14-.702z"/></svg>
+          <span>GitLab</span>
+        </div>
+        <div class="logo-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>
+          <span>Notifications</span>
+        </div>
+        <div class="logo-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.128 0a1.934 1.934 0 0 1 1.935 1.935v20.13A1.934 1.934 0 0 1 17.128 24H6.872a1.934 1.934 0 0 1-1.935-1.935V1.935A1.934 1.934 0 0 1 6.872 0h10.256zm-3.016 5.479H9.889v1.584h4.223V5.479zm-4.223 3.168v1.584h4.223V8.647H9.889zm0 3.168v1.584h4.223v-1.584H9.889zm0 3.168v1.584h4.223v-1.584H9.889z"/></svg>
+          <span>Reports</span>
+        </div>
+        <div class="logo-item">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.316 3.051a1 1 0 0 0-1.633 0l-9.5 13.5a1 1 0 0 0 .817 1.575h19a1 1 0 0 0 .817-1.575l-9.5-13.5zM12 7.05l6.5 9.23H5.5L12 7.05z"/></svg>
+          <span>Alerts</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="features.title">
+          Everything you need for <span class="gradient-text">compliance automation</span>
+        </h2>
+        <p class="section-description" data-i18n="features.description">
+          Sentinel monitors your repositories 24/7, enforcing policies and generating tamper-proof evidence automatically.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item1.title">5 Built-in Rules</h3>
+          <p class="feature-description" data-i18n="features.item1.description">
+            Detect direct pushes to main, missing reviews, hardcoded secrets, missing tests, and license issues out of the box.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item2.title">Immutable Evidence</h3>
+          <p class="feature-description" data-i18n="features.item2.description">
+            Every audit generates a cryptographically signed, tamper-proof evidence record you can use for compliance reporting.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item3.title">Real-time Auditing</h3>
+          <p class="feature-description" data-i18n="features.item3.description">
+            Audits run automatically on every push and pull request. No manual triggers, no delays, no forgotten checks.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item4.title">Zero Configuration</h3>
+          <p class="feature-description" data-i18n="features.item4.description">
+            Install the GitHub App and you're done. Sentinel works immediately with sensible defaults. Customize later if needed.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item5.title">Export Reports</h3>
+          <p class="feature-description" data-i18n="features.item5.description">
+            Generate JSON and PDF reports for auditors, stakeholders, or compliance frameworks like SOC 2 and ISO 27001.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="feature-title" data-i18n="features.item6.title">API Access</h3>
+          <p class="feature-description" data-i18n="features.item6.description">
+            Full REST API to query audit results, evidence, and statistics. Integrate with your existing tools and dashboards.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works Section -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="howItWorks.title">
+          How Sentinel <span class="gradient-text">Works</span>
+        </h2>
+        <p class="section-description" data-i18n="howItWorks.description">
+          From installation to compliance report in three simple steps.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="howItWorks.step1.title">Install the GitHub App</h3>
+            <p class="step-description" data-i18n="howItWorks.step1.description">
+              Click "Install", select your repositories, and authorize. That's it — no configuration files, no CI changes, no tokens to manage.
+            </p>
+          </div>
+          <div class="step-visual">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="howItWorks.step2.title">Push Code as Usual</h3>
+            <p class="step-description" data-i18n="howItWorks.step2.description">
+              Every push and pull request triggers an automatic audit. Sentinel analyzes your code against 5 compliance rules in under a second.
+            </p>
+          </div>
+          <div class="step-visual">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3 class="step-title" data-i18n="howItWorks.step3.title">Get Evidence & Reports</h3>
+            <p class="step-description" data-i18n="howItWorks.step3.description">
+              Access immutable audit evidence via API or download PDF reports. Use them for compliance audits, security reviews, or stakeholder updates.
+            </p>
+          </div>
+          <div class="step-visual">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <polyline points="10 9 9 9 8 9"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules Section -->
+  <section class="rules">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="rules.title">
+          Built-in <span class="gradient-text">Compliance Rules</span>
+        </h2>
+        <p class="section-description" data-i18n="rules.description">
+          Five essential rules that cover the most common compliance requirements.
+        </p>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-severity high">HIGH</div>
+          <h4 class="rule-name">no-direct-main</h4>
+          <p class="rule-description" data-i18n="rules.rule1">
+            Detects direct pushes to protected branches (main/master). Enforces pull request workflow.
+          </p>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-severity high">HIGH</div>
+          <h4 class="rule-name">pr-review-required</h4>
+          <p class="rule-description" data-i18n="rules.rule2">
+            Ensures all merged PRs have at least one approval. Prevents unreviewed code from shipping.
+          </p>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-severity critical">CRITICAL</div>
+          <h4 class="rule-name">secrets-scan</h4>
+          <p class="rule-description" data-i18n="rules.rule3">
+            Scans for hardcoded secrets, API keys, tokens, and credentials. 20+ patterns detected.
+          </p>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-severity medium">MEDIUM</div>
+          <h4 class="rule-name">test-required</h4>
+          <p class="rule-description" data-i18n="rules.rule4">
+            Checks if code changes include corresponding tests. Supports multiple languages and frameworks.
+          </p>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-severity low">LOW</div>
+          <h4 class="rule-name">license-check</h4>
+          <p class="rule-description" data-i18n="rules.rule5">
+            Verifies repository has a valid OSI-approved license. Essential for open source compliance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="pricing.title">
+          Simple, <span class="gradient-text">Transparent Pricing</span>
+        </h2>
+        <p class="section-description" data-i18n="pricing.description">
+          Start free, upgrade when you need more. No hidden fees, no surprises.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Plan -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3 class="pricing-name" data-i18n="pricing.free.name">Free</h3>
+            <p class="pricing-description" data-i18n="pricing.free.description">Perfect for trying Sentinel</p>
+          </div>
+          <div class="pricing-price">
+            <span class="price-amount">$0</span>
+            <span class="price-period" data-i18n="pricing.period">/month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.free.feature1">50 executions/month</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.free.feature2">Up to 3 repositories</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.free.feature3">7-day evidence retention</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.free.feature4">All 5 built-in rules</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.free.feature5">API access</span>
+            </li>
+          </ul>
+          <a href="https://github.com/apps/sentinel-engine" class="btn btn-secondary btn-block" data-i18n="pricing.free.cta">
+            Start Free
+          </a>
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="pricing-card featured">
+          <div class="pricing-badge" data-i18n="pricing.pro.badge">Most Popular</div>
+          <div class="pricing-header">
+            <h3 class="pricing-name" data-i18n="pricing.pro.name">Pro</h3>
+            <p class="pricing-description" data-i18n="pricing.pro.description">For teams serious about compliance</p>
+          </div>
+          <div class="pricing-price">
+            <span class="price-amount">$29</span>
+            <span class="price-period" data-i18n="pricing.period">/month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature1">1,000 executions/month</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature2">Up to 25 repositories</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature3">30-day evidence retention</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature4">PDF reports</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature5">Custom rules</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.pro.feature6">Webhook notifications</span>
+            </li>
+          </ul>
+          <a href="https://github.com/apps/sentinel-engine" class="btn btn-primary btn-block" data-i18n="pricing.pro.cta">
+            Start 14-day Trial
+          </a>
+        </div>
+
+        <!-- Enterprise Plan -->
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3 class="pricing-name" data-i18n="pricing.enterprise.name">Enterprise</h3>
+            <p class="pricing-description" data-i18n="pricing.enterprise.description">For large organizations</p>
+          </div>
+          <div class="pricing-price">
+            <span class="price-amount">$99</span>
+            <span class="price-period" data-i18n="pricing.period">/month</span>
+          </div>
+          <ul class="pricing-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature1">Unlimited executions</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature2">Unlimited repositories</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature3">1-year evidence retention</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature4">Priority support</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature5">SSO / SAML (coming soon)</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="pricing.enterprise.feature6">Dedicated account manager</span>
+            </li>
+          </ul>
+          <a href="mailto:enterprise@sentinel-engine.com" class="btn btn-secondary btn-block" data-i18n="pricing.enterprise.cta">
+            Contact Sales
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="faq.title">
+          Frequently Asked <span class="gradient-text">Questions</span>
+        </h2>
+      </div>
+
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q1.question">What permissions does Sentinel need?</h4>
+          <p class="faq-answer" data-i18n="faq.q1.answer">
+            Sentinel only requires read access to your code and metadata, plus write access to create check runs and commit statuses. We never store your source code — only audit metadata and evidence hashes.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q2.question">Can I use Sentinel with private repositories?</h4>
+          <p class="faq-answer" data-i18n="faq.q2.answer">
+            Yes! Sentinel works with both public and private repositories. Your code stays private — we only process webhook events and never clone or store your repository contents.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q3.question">How long does an audit take?</h4>
+          <p class="faq-answer" data-i18n="faq.q3.answer">
+            Most audits complete in under 1 second. Sentinel processes webhook events in real-time, so you get immediate feedback on every push and pull request.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q4.question">Can I add custom rules?</h4>
+          <p class="faq-answer" data-i18n="faq.q4.answer">
+            Yes, on Pro and Enterprise plans. You can write custom rules in JavaScript/TypeScript to enforce organization-specific policies and compliance requirements.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q5.question">What happens if I exceed my plan limits?</h4>
+          <p class="faq-answer" data-i18n="faq.q5.answer">
+            We'll notify you when you're approaching your limit. If you exceed it, audits will pause until the next billing cycle or you upgrade. We'll never charge you unexpectedly.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h4 class="faq-question" data-i18n="faq.q6.question">Is there a trial period?</h4>
+          <p class="faq-answer" data-i18n="faq.q6.answer">
+            Yes! Every new installation gets a 14-day trial with Pro features. No credit card required. After the trial, you can continue with the Free plan or upgrade.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title" data-i18n="cta.title">
+          Ready to automate your compliance?
+        </h2>
+        <p class="cta-description" data-i18n="cta.description">
+          Join teams who trust Sentinel to keep their repositories compliant. Start your free trial today.
+        </p>
+        <div class="cta-actions">
+          <a href="https://github.com/apps/sentinel-engine" class="btn btn-primary btn-lg">
+            <span data-i18n="cta.button">Install Sentinel Free</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bg"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">Sentinel</span>
+          </a>
+          <p class="footer-tagline" data-i18n="footer.tagline">
+            Policy-as-Code Audit Engine
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <div class="footer-column">
+            <h4 data-i18n="footer.product">Product</h4>
+            <a href="#features" data-i18n="nav.features">Features</a>
+            <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
+          </div>
+
+          <div class="footer-column">
+            <h4 data-i18n="footer.resources">Resources</h4>
+            <a href="https://github.com/your-org/sentinel-engine" data-i18n="footer.documentation">Documentation</a>
+            <a href="https://github.com/your-org/sentinel-engine" data-i18n="footer.github">GitHub</a>
+            <a href="/api" data-i18n="footer.api">API Reference</a>
+          </div>
+
+          <div class="footer-column">
+            <h4 data-i18n="footer.company">Company</h4>
+            <a href="mailto:hello@sentinel-engine.com" data-i18n="footer.contact">Contact</a>
+            <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a>
+            <a href="/terms" data-i18n="footer.terms">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">© 2024 Sentinel Engine. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
