@@ -1,9 +1,3 @@
-
----
-
-# .gitignore
-
-```
 # Dependencies
 node_modules/
 
@@ -27,4 +21,8 @@ Thumbs.db
 
 # Tests coverage
 coverage/
-```
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
