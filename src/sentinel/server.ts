@@ -11,7 +11,13 @@ Bootstrap cumpre:
 
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import { config, printConfigSummary, validateConfig } from './config'
+
+// ES Module dirname equivalent
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 import githubWebhook from './webhook/githubWebhook'
 import reportsRouter from './reports/reportsRouter'
@@ -24,7 +30,8 @@ import {
   getUsageSummary,
   createCheckout,
   isPaddleConfigured,
-  paddleWebhookRouter
+  paddleWebhookRouter,
+  requireFeature
 } from './billing'
 
 import { ApiKeyGuard } from './security/ApiKeyGuard'
@@ -185,6 +192,90 @@ app.get(
 
 // Router de reports legado
 app.use('/reports', ApiKeyGuard, reportsRouter)
+
+// PDF Report endpoint (requires pdfReports feature)
+app.get(
+  '/reports/:id/pdf',
+  ApiKeyGuard,
+  requireFeature('pdfReports'),
+  async (req, res) => {
+    try {
+      const { id } = req.params
+      // TODO: Implement PDF generation
+      // For now, return feature info
+      res.status(501).json({
+        message: 'PDF generation coming soon',
+        reportId: id,
+        feature: 'pdfReports',
+        status: 'not_implemented'
+      })
+    } catch (error) {
+      res.status(500).json({
+        error: 'Failed to generate PDF report'
+      })
+    }
+  }
+)
+
+// Custom rules endpoint (requires customRules feature)
+app.get(
+  '/rules/custom',
+  ApiKeyGuard,
+  requireFeature('customRules'),
+  (_req, res) => {
+    // TODO: Implement custom rules listing
+    res.status(200).json({
+      rules: [],
+      message: 'Custom rules feature enabled'
+    })
+  }
+)
+
+app.post(
+  '/rules/custom',
+  ApiKeyGuard,
+  requireFeature('customRules'),
+  (_req, res) => {
+    // TODO: Implement custom rules creation
+    res.status(501).json({
+      message: 'Custom rules creation coming soon',
+      feature: 'customRules'
+    })
+  }
+)
+
+// Webhook notifications config (requires webhookNotifications feature)
+app.get(
+  '/settings/webhooks',
+  ApiKeyGuard,
+  requireFeature('webhookNotifications'),
+  (_req, res) => {
+    // TODO: Implement webhook settings
+    res.status(200).json({
+      webhooks: [],
+      message: 'Webhook notifications feature enabled'
+    })
+  }
+)
+
+app.post(
+  '/settings/webhooks',
+  ApiKeyGuard,
+  requireFeature('webhookNotifications'),
+  (_req, res) => {
+    // TODO: Implement webhook creation
+    res.status(501).json({
+      message: 'Webhook configuration coming soon',
+      feature: 'webhookNotifications'
+    })
+  }
+)
+
+// Serve static files from landing page (billing callbacks)
+const landingPath = path.join(__dirname, '../../landing')
+app.use('/billing', express.static(path.join(landingPath, 'billing')))
+app.use('/css', express.static(path.join(landingPath, 'css')))
+app.use('/js', express.static(path.join(landingPath, 'js')))
 
 // Validate configuration on startup
 const configValidation = validateConfig()

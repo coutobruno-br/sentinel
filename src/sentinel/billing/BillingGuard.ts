@@ -2,6 +2,7 @@
 import { Request, Response, NextFunction } from 'express'
 import {
   getOrCreateSubscription,
+  getSubscription,
   checkExecutionAllowed,
   Subscription,
   SubscriptionCheck
@@ -206,8 +207,183 @@ export function getBillingHeaders(req: Request): Record<string, string> {
  */
 export function checkFeature(
   subscription: Subscription,
-  feature: 'pdfReports' | 'apiAccess' | 'prioritySupport' | 'customRules' | 'webhookNotifications'
+  feature: FeatureFlag
 ): boolean {
   const plan = getPlan(subscription.planId)
   return plan.limits[feature]
+}
+
+/**
+ * Tipos de features disponíveis
+ */
+export type FeatureFlag = 'pdfReports' | 'apiAccess' | 'prioritySupport' | 'customRules' | 'webhookNotifications'
+
+/**
+ * Mensagens de erro por feature
+ */
+const FEATURE_MESSAGES: Record<FeatureFlag, string> = {
+  pdfReports: 'PDF reports are available on Pro and Enterprise plans',
+  apiAccess: 'API access is not available on your current plan',
+  prioritySupport: 'Priority support is available on Enterprise plan only',
+  customRules: 'Custom rules are available on Pro and Enterprise plans',
+  webhookNotifications: 'Webhook notifications are available on Pro and Enterprise plans'
+}
+
+/**
+ * Middleware factory para verificar feature flags
+ *
+ * Uso:
+ * app.get('/reports/pdf', requireFeature('pdfReports'), handler)
+ */
+export function requireFeature(feature: FeatureFlag) {
+  return function featureGuard(req: Request, res: Response, next: NextFunction): void {
+    // Se não há contexto de billing, verificar via accountId no header ou query
+    let subscription: Subscription | null = null
+
+    if (req.billing) {
+      subscription = req.billing.subscription
+    } else {
+      // Tentar obter subscription via header ou query param
+      const accountId = req.headers['x-sentinel-account-id'] as string
+        || req.query.accountId as string
+
+      if (accountId) {
+        subscription = getSubscription(accountId) ?? null
+      }
+    }
+
+    // Se não encontrou subscription, permitir apenas features básicas
+    if (!subscription) {
+      // Para rotas que requerem identificação, bloquear
+      if (feature !== 'apiAccess') {
+        res.status(401).json({
+          error: 'authentication_required',
+          message: 'Please provide account identification to access this feature',
+          feature
+        })
+        return
+      }
+      return next()
+    }
+
+    // Verificar se feature está disponível no plano
+    const hasFeature = checkFeature(subscription, feature)
+
+    if (!hasFeature) {
+      res.status(403).json({
+        error: 'feature_not_available',
+        message: FEATURE_MESSAGES[feature],
+        feature,
+        currentPlan: subscription.planId,
+        requiredPlans: getPlansWithFeature(feature),
+        upgradeUrl: 'https://sentinel-engine.com/#pricing'
+      })
+      return
+    }
+
+    next()
+  }
+}
+
+/**
+ * Retorna lista de planos que possuem uma feature
+ */
+function getPlansWithFeature(feature: FeatureFlag): string[] {
+  const plans: string[] = []
+  const allPlans = ['free', 'pro', 'enterprise'] as const
+
+  for (const planId of allPlans) {
+    const plan = getPlan(planId)
+    if (plan.limits[feature]) {
+      plans.push(planId)
+    }
+  }
+
+  return plans
+}
+
+/**
+ * Middleware para verificar múltiplas features (todas devem estar disponíveis)
+ */
+export function requireAllFeatures(...features: FeatureFlag[]) {
+  return function allFeaturesGuard(req: Request, res: Response, next: NextFunction): void {
+    let subscription: Subscription | null = null
+
+    if (req.billing) {
+      subscription = req.billing.subscription
+    } else {
+      const accountId = req.headers['x-sentinel-account-id'] as string
+        || req.query.accountId as string
+
+      if (accountId) {
+        subscription = getSubscription(accountId) ?? null
+      }
+    }
+
+    if (!subscription) {
+      res.status(401).json({
+        error: 'authentication_required',
+        message: 'Please provide account identification to access this feature'
+      })
+      return
+    }
+
+    const missingFeatures = features.filter(f => !checkFeature(subscription!, f))
+
+    if (missingFeatures.length > 0) {
+      res.status(403).json({
+        error: 'features_not_available',
+        message: `The following features are not available on your plan: ${missingFeatures.join(', ')}`,
+        missingFeatures,
+        currentPlan: subscription.planId,
+        upgradeUrl: 'https://sentinel-engine.com/#pricing'
+      })
+      return
+    }
+
+    next()
+  }
+}
+
+/**
+ * Middleware para verificar pelo menos uma feature (qualquer uma)
+ */
+export function requireAnyFeature(...features: FeatureFlag[]) {
+  return function anyFeatureGuard(req: Request, res: Response, next: NextFunction): void {
+    let subscription: Subscription | null = null
+
+    if (req.billing) {
+      subscription = req.billing.subscription
+    } else {
+      const accountId = req.headers['x-sentinel-account-id'] as string
+        || req.query.accountId as string
+
+      if (accountId) {
+        subscription = getSubscription(accountId) ?? null
+      }
+    }
+
+    if (!subscription) {
+      res.status(401).json({
+        error: 'authentication_required',
+        message: 'Please provide account identification to access this feature'
+      })
+      return
+    }
+
+    const hasAnyFeature = features.some(f => checkFeature(subscription!, f))
+
+    if (!hasAnyFeature) {
+      res.status(403).json({
+        error: 'feature_not_available',
+        message: `This endpoint requires one of the following features: ${features.join(', ')}`,
+        requiredFeatures: features,
+        currentPlan: subscription.planId,
+        upgradeUrl: 'https://sentinel-engine.com/#pricing'
+      })
+      return
+    }
+
+    next()
+  }
 }

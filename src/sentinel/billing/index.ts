@@ -62,7 +62,11 @@ export {
   repositoryLimitGuard,
   getBillingHeaders,
   checkFeature,
-  type BillingContext
+  requireFeature,
+  requireAllFeatures,
+  requireAnyFeature,
+  type BillingContext,
+  type FeatureFlag
 } from './BillingGuard'
 
 // Paddle Integration
