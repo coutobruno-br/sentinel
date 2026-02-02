@@ -64,3 +64,21 @@ export {
   checkFeature,
   type BillingContext
 } from './BillingGuard'
+
+// Paddle Integration
+export {
+  createCheckout,
+  getOrCreatePaddleCustomer,
+  getPaddleSubscription,
+  cancelPaddleSubscription,
+  pausePaddleSubscription,
+  resumePaddleSubscription,
+  updatePaddleSubscription,
+  getPlanFromPriceId,
+  getPriceIdFromPlan,
+  isPaddleConfigured,
+  getPaddleConfig,
+  paddleWebhookRouter,
+  type CheckoutOptions,
+  type CheckoutResult
+} from './paddle'

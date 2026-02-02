@@ -13,7 +13,7 @@ import { createLocalContext, ScanOptions } from './localScanner'
 import { secretsScanRule } from '../rules/secretsScanRule'
 import { licenseCheckRule } from '../rules/licenseCheckRule'
 import { testRequiredRule } from '../rules/testRequiredRule'
-import type { PolicyRule, PolicyResult, PolicyContext } from '../engine/types'
+import type { PolicyRule, PolicyResult } from '../engine/types'
 
 // Cores ANSI para terminal
 const colors = {
@@ -131,16 +131,6 @@ function getSeverityColor(severity: string): string {
     case 'medium': return colors.yellow
     case 'low': return colors.blue
     default: return colors.white
-  }
-}
-
-function getSeverityIcon(severity: string): string {
-  switch (severity) {
-    case 'critical': return '!!!'
-    case 'high': return '!!'
-    case 'medium': return '!'
-    case 'low': return 'i'
-    default: return '*'
   }
 }
 

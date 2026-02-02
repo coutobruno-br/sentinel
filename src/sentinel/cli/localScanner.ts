@@ -1,7 +1,7 @@
 // src/sentinel/cli/localScanner.ts
 import { execSync } from 'child_process'
 import { readFileSync, existsSync, statSync } from 'fs'
-import { join, relative } from 'path'
+import { join } from 'path'
 import type { FileInfo, PolicyContext, RepoInfo } from '../engine/types'
 
 /**

@@ -10,6 +10,8 @@ Bootstrap cumpre:
 */
 
 import express from 'express'
+import cors from 'cors'
+import { config, printConfigSummary, validateConfig } from './config'
 
 import githubWebhook from './webhook/githubWebhook'
 import reportsRouter from './reports/reportsRouter'
@@ -19,7 +21,10 @@ import {
   getGlobalUsageStats,
   listAvailablePlans,
   getSubscription,
-  getUsageSummary
+  getUsageSummary,
+  createCheckout,
+  isPaddleConfigured,
+  paddleWebhookRouter
 } from './billing'
 
 import { ApiKeyGuard } from './security/ApiKeyGuard'
@@ -34,6 +39,14 @@ import {
 
 const app = express()
 app.use(express.json())
+
+// CORS - permitir requisições da landing page
+app.use(cors({
+  origin: config.isDev
+    ? ['http://localhost:8080', 'http://127.0.0.1:8080']
+    : [config.landingUrl],
+  credentials: true
+}))
 
 // Inicializar persistência (SQLite)
 const sqliteAdapter = getSQLiteAdapter()
@@ -94,6 +107,67 @@ app.get('/billing/subscription/:accountId', ApiKeyGuard, (req, res) => {
   })
 })
 
+// Paddle configuration endpoint (public - for client)
+app.get('/billing/paddle/config', (_req, res) => {
+  res.status(200).json({
+    configured: config.paddle.isConfigured(),
+    clientToken: config.paddle.clientToken || null,
+    environment: config.paddle.environment
+  })
+})
+
+// Client configuration endpoint (for landing page)
+app.get('/config', (_req, res) => {
+  res.status(200).json({
+    env: config.env,
+    apiUrl: config.apiUrl,
+    landingUrl: config.landingUrl,
+    paddle: {
+      configured: config.paddle.isConfigured(),
+      environment: config.paddle.environment,
+      clientToken: config.paddle.clientToken || null,
+    },
+  })
+})
+
+// Checkout endpoint - creates Paddle checkout session
+app.post('/billing/checkout', async (req, res) => {
+  try {
+    const { accountId, accountLogin, email, planId } = req.body
+
+    if (!accountId || !email || !planId) {
+      return res.status(400).json({
+        error: 'Missing required fields: accountId, email, planId'
+      })
+    }
+
+    if (!isPaddleConfigured()) {
+      return res.status(503).json({
+        error: 'Payment system not configured'
+      })
+    }
+
+    const result = await createCheckout({
+      accountId,
+      accountLogin: accountLogin ?? accountId,
+      email,
+      planId,
+      successUrl: `${req.headers.origin}/billing/success`,
+      cancelUrl: `${req.headers.origin}/billing/cancel`
+    })
+
+    res.status(200).json(result)
+  } catch (error) {
+    console.error('[Billing] Checkout error:', error)
+    res.status(500).json({
+      error: error instanceof Error ? error.message : 'Checkout failed'
+    })
+  }
+})
+
+// Paddle webhooks
+app.use('/webhook/paddle', paddleWebhookRouter)
+
 // Webhooks (ingestão)
 app.use('/webhook/github', githubWebhook)
 
@@ -112,10 +186,18 @@ app.get(
 // Router de reports legado
 app.use('/reports', ApiKeyGuard, reportsRouter)
 
-const port = Number(process.env.PORT) || 3000
+// Validate configuration on startup
+const configValidation = validateConfig()
+if (!configValidation.valid && config.isProd) {
+  console.warn('[Sentinel] Configuration warnings:')
+  configValidation.errors.forEach(err => console.warn(`  - ${err}`))
+}
 
-const server = app.listen(port, () => {
-  console.log(`[Sentinel] Server running on port ${port}`)
+const server = app.listen(config.port, () => {
+  console.log('')
+  printConfigSummary()
+  console.log('')
+  console.log(`[Sentinel] Server running on port ${config.port}`)
   console.log(`[Sentinel] Database: SQLite (persistent)`)
   console.log(`[Sentinel] Evidences: ${evidenceStore.count()}`)
   console.log(`[Sentinel] Executions: ${executionIndex.count()}`)

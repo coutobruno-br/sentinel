@@ -1038,3 +1038,160 @@ img {
     font-size: 0.75rem;
   }
 }
+
+/* ===========================================
+   Modal Styles (Paddle Checkout)
+   =========================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: var(--space-lg);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  max-width: 420px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+
+.modal h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.modal p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xl);
+  font-size: 0.95rem;
+}
+
+.modal input[type="email"] {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  margin-bottom: var(--space-lg);
+}
+
+.modal input[type="email"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.modal input[type="email"]::placeholder {
+  color: var(--color-text-muted);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  padding: var(--space-sm) var(--space-lg);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================================
+   Notification Toast
+   =========================================== */
+
+.notification {
+  position: fixed;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  font-size: 0.95rem;
+  font-weight: 500;
+  z-index: 10001;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+
+.notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification-success {
+  background: var(--color-success);
+  color: white;
+}
+
+.notification-error {
+  background: var(--color-error);
+  color: white;
+}
+
+.notification-info {
+  background: var(--color-primary);
+  color: white;
+}
+
+.notification-warning {
+  background: var(--color-warning);
+  color: black;
+}
+
+@media (max-width: 480px) {
+  .notification {
+    left: var(--space-md);
+    right: var(--space-md);
+    bottom: var(--space-md);
+  }
+
+  .modal {
+    padding: var(--space-xl);
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+}

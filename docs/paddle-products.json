@@ -1,0 +1,140 @@
+{
+  "products": [
+    {
+      "name": "Sentinel Pro",
+      "description": "For teams serious about compliance. 1,000 executions/month, 25 repositories, PDF reports, custom rules, and webhook notifications.",
+      "type": "standard",
+      "tax_category": "saas",
+      "image_url": "https://sentinel-engine.com/images/sentinel-pro.png",
+      "custom_data": {
+        "plan_id": "pro",
+        "tier": "paid"
+      }
+    },
+    {
+      "name": "Sentinel Enterprise",
+      "description": "For large organizations. Unlimited executions, unlimited repositories, 1-year evidence retention, priority support, and dedicated account manager.",
+      "type": "standard",
+      "tax_category": "saas",
+      "image_url": "https://sentinel-engine.com/images/sentinel-enterprise.png",
+      "custom_data": {
+        "plan_id": "enterprise",
+        "tier": "paid"
+      }
+    }
+  ],
+  "prices": [
+    {
+      "product": "Sentinel Pro",
+      "description": "Monthly subscription",
+      "billing_cycle": {
+        "frequency": 1,
+        "interval": "month"
+      },
+      "unit_price": {
+        "amount": "2900",
+        "currency_code": "USD"
+      },
+      "trial_period": {
+        "frequency": 14,
+        "interval": "day"
+      },
+      "custom_data": {
+        "plan_id": "pro",
+        "billing": "monthly"
+      }
+    },
+    {
+      "product": "Sentinel Pro",
+      "description": "Annual subscription (save 17%)",
+      "billing_cycle": {
+        "frequency": 1,
+        "interval": "year"
+      },
+      "unit_price": {
+        "amount": "29000",
+        "currency_code": "USD"
+      },
+      "trial_period": {
+        "frequency": 14,
+        "interval": "day"
+      },
+      "custom_data": {
+        "plan_id": "pro",
+        "billing": "yearly"
+      }
+    },
+    {
+      "product": "Sentinel Enterprise",
+      "description": "Monthly subscription",
+      "billing_cycle": {
+        "frequency": 1,
+        "interval": "month"
+      },
+      "unit_price": {
+        "amount": "9900",
+        "currency_code": "USD"
+      },
+      "trial_period": {
+        "frequency": 14,
+        "interval": "day"
+      },
+      "custom_data": {
+        "plan_id": "enterprise",
+        "billing": "monthly"
+      }
+    },
+    {
+      "product": "Sentinel Enterprise",
+      "description": "Annual subscription (save 17%)",
+      "billing_cycle": {
+        "frequency": 1,
+        "interval": "year"
+      },
+      "unit_price": {
+        "amount": "99000",
+        "currency_code": "USD"
+      },
+      "trial_period": {
+        "frequency": 14,
+        "interval": "day"
+      },
+      "custom_data": {
+        "plan_id": "enterprise",
+        "billing": "yearly"
+      }
+    }
+  ],
+  "webhook_endpoints": [
+    {
+      "description": "Sentinel Production Webhook",
+      "destination": "https://api.sentinel-engine.com/webhook/paddle",
+      "subscribed_events": [
+        "subscription.created",
+        "subscription.updated",
+        "subscription.canceled",
+        "subscription.paused",
+        "subscription.resumed",
+        "subscription.activated",
+        "transaction.completed",
+        "transaction.payment_failed"
+      ]
+    }
+  ],
+  "setup_instructions": {
+    "step_1": "Go to Paddle Dashboard > Catalog > Products",
+    "step_2": "Create each product from the 'products' array above",
+    "step_3": "For each product, go to Prices and create prices from the 'prices' array",
+    "step_4": "Copy the Price IDs (pri_...) and add to your .env file",
+    "step_5": "Go to Developer Tools > Notifications and create the webhook endpoint",
+    "step_6": "Copy the Webhook Secret and add to PADDLE_WEBHOOK_SECRET in .env",
+    "env_example": {
+      "PADDLE_API_KEY": "pdl_sdbx_xxx (from Developer Tools > Authentication)",
+      "PADDLE_CLIENT_TOKEN": "test_xxx (from Developer Tools > Authentication > Client-side tokens)",
+      "PADDLE_WEBHOOK_SECRET": "pdl_ntfset_xxx (from webhook notification settings)",
+      "PADDLE_PRICE_ID_PRO": "pri_xxx (Monthly Pro price ID)",
+      "PADDLE_PRICE_ID_ENTERPRISE": "pri_xxx (Monthly Enterprise price ID)",
+      "PADDLE_ENVIRONMENT": "sandbox"
+    }
+  }
+}
